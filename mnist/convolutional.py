@@ -11,6 +11,7 @@ with tf.variable_scope("convolutional"):
     keep_prob = tf.placeholder(tf.float32)
     y, variables = model.convolutional(x, keep_prob)
 
+# 参数解释见regression.py
 y_ = tf.placeholder(tf.float32, [None, 10], name='y')
 cross_entropy = -tf.reduce_sum(y_ * tf.log(y))
 
@@ -33,6 +34,7 @@ with tf.Session() as sess:
             train_accuracy = sess.run(accuracy, feed_dict={x:batch[0], y_:batch[1], keep_prob:1.0})
             print("step %d, training accuracy %g" % (i, train_accuracy))
 
+        # 在训练时可以dropout，但是在做预测的时候不可以
         sess.run(train_step, feed_dict={x: batch[0], y_: batch[1], keep_prob:0.5})
 
     print(sess.run(accuracy, feed_dict={x: data.test.images, y_: data.test.labels, keep_prob:1.0}))
